@@ -6,7 +6,7 @@ const Products = () => {
       <style>{`
         /* Products Section */
         .products-section {
-          padding-top: 48px;
+          padding-top: 64px;
           padding-bottom: 48px;
           position: relative;
           box-sizing: border-box;

@@ -69,7 +69,7 @@ const AboutStats = () => {
         /* About Section */
         .about-section {
           padding-top: 48px;
-          padding-bottom: 48px;
+          padding-bottom: 72px;
           position: relative;
           box-sizing: border-box;
           overflow: hidden;
