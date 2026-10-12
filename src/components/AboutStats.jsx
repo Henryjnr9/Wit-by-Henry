@@ -1,0 +1,248 @@
+import React, { useState, useEffect, useRef } from "react";
+
+const AboutStats = () => {
+  const sectionRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // Generous scroll trigger window (from 85% down viewport to 15% from top)
+      const start = windowHeight * 0.85;
+      const end = windowHeight * 0.15;
+      const totalDistance = start - end;
+      const currentPos = start - rect.top;
+
+      const progress = Math.min(Math.max(currentPos / totalDistance, 0), 1);
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=swap');
+
+        /* About Section (93px from logos to text, 81px to next section) */
+        .about-section {
+          padding-top: 64px;
+          padding-bottom: 64px;
+          position: relative;
+          box-sizing: border-box;
+        }
+
+        /* Layout Container */
+        .about-layout {
+          display: flex;
+          width: 100%;
+         justify-content: space-between;
+          margin: 0 auto;
+          align-items: flex-start;
+          gap: 140.75px; /* Exact Figma gap */
+          box-sizing: border-box;
+        }
+
+        /* WIT Logo (width: 257.245px, height: 111.996px) */
+        .about-logo-wrapper {
+          width: 257.245px;
+          height: 111.996px;
+          flex-shrink: 0;
+          margin-top: 96px; /* 189px - 93px = 96px exact top offset */
+        }
+
+        .about-logo-svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+
+        /* Text Container (882px with 16px gap to eyebrow) */
+        .about-text-container {
+          display: flex;
+          width: 882px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        /* Eyebrow: WIT: CELEBRATING 25 YEARS IN 2026! */
+        .about-eyebrow {
+          color: #F4F7FF;
+          font-family: 'Geist Mono', monospace;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 24px; /* 150% */
+          letter-spacing: -0.32px;
+          margin: 0;
+        }
+
+        /* 48px Editorial Text Block */
+        .about-text-block {
+          width: 882px;
+          font-family: 'Geist', sans-serif;
+          font-size: 48px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 48px; /* 100% */
+          letter-spacing: -0.96px;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        /* Paragraph groups */
+        .about-lines-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0px;
+        }
+
+        /* Individual line that lights up independently */
+        .reveal-line {
+          color: #424243;
+          display: block;
+          margin: 0;
+          line-height: 48px;
+          transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Illuminated active state */
+        .reveal-line.revealed {
+          color: #F4F7FF;
+        }
+
+        /* Second paragraph ("Now Engineering...") has one line height separation */
+        .about-future-group {
+          margin-top: 48px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) {
+          .about-layout {
+            gap: 60px;
+          }
+
+          .about-text-container,
+          .about-text-block {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .about-section {
+            padding-top: 60px;
+            padding-bottom: 60px;
+          }
+
+          .about-layout {
+            flex-direction: column;
+            gap: 40px;
+          }
+
+          .about-logo-wrapper {
+            margin-top: 0;
+            width: 180px;
+            height: auto;
+          }
+
+          .about-text-block {
+            font-size: 32px;
+            line-height: 38px;
+            letter-spacing: -0.64px;
+          }
+
+          .reveal-line {
+            line-height: 38px;
+          }
+
+          .about-future-group {
+            margin-top: 28px;
+          }
+        }
+      `}</style>
+
+      <section ref={sectionRef} className="about-section">
+        <div className="section-container">
+          <div className="about-layout">
+            {/* Left: WIT SVG Logo */}
+            <div className="about-logo-wrapper">
+              <svg
+                className="about-logo-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="258"
+                height="112"
+                viewBox="0 0 258 112"
+                fill="none"
+              >
+                <path
+                  d="M92.4954 39.2127C92.4954 32.9358 97.4323 27.999 103.709 27.999H109.316C115.346 27.999 120.494 32.9358 120.494 39.2127V100.782C120.494 106.848 115.346 111.996 109.316 111.996H83.997C77.967 111.996 72.8186 106.848 72.8186 100.782V92.2839C72.8186 87.5938 69.2217 83.997 64.5317 83.997C59.8417 83.997 56.0333 87.5938 56.0333 92.2839V100.782C56.0333 106.848 51.1317 111.996 44.8196 111.996H39.2127C33.1827 111.996 27.999 106.848 27.999 100.782V95.1754C27.999 88.8986 23.0621 83.9617 16.7853 83.9617H11.1784C5.14843 83.9617 0.211579 78.8133 0 72.7833V39.1774C0 32.9006 5.14843 27.9637 11.1784 27.9637H16.7853C23.0621 27.9637 27.999 32.9006 27.999 39.1774V74.1233C27.999 79.4833 32.4774 83.9617 37.8374 83.9617C43.1974 83.9617 47.6759 79.4833 47.6759 74.1233V39.1774C47.6759 32.9006 52.5775 27.9637 58.8543 27.9637H64.4612C70.4912 27.9637 75.6749 32.9006 75.6749 39.1774V75.4633C75.6749 80.4001 79.2365 83.9617 83.9617 83.9617C88.687 83.9617 92.4602 80.3649 92.4602 75.4633V39.1774L92.4954 39.2127ZM144.756 72.8186C151.032 72.8186 155.934 77.7201 155.934 83.7854V100.782C155.934 106.848 161.082 111.996 167.148 111.996H172.755C179.031 111.996 183.968 106.848 183.968 100.782V55.998C183.968 49.7211 179.031 44.7843 172.755 44.7843H144.756C138.726 44.7843 133.577 49.7211 133.577 55.998V61.6049C133.577 67.6349 138.726 72.8186 144.756 72.8186ZM172.755 0.0352632H167.148C161.118 0.0352632 155.934 4.97211 155.934 11.2137V16.8206C155.934 22.8506 161.082 27.999 167.148 27.999H172.755C179.031 27.999 183.968 22.8506 183.968 16.8206V11.2137C183.933 4.97211 179.031 0.0352632 172.755 0.0352632ZM201.282 67.6701V72.8186C201.282 78.8838 206.431 83.997 212.496 83.997H218.068C224.345 83.997 229.281 88.9338 229.281 95.1754V100.782C229.281 106.848 234.43 111.996 240.46 111.996H246.067C252.344 111.996 257.245 106.848 257.245 100.782V95.1754C257.245 88.8986 252.308 83.9617 246.067 83.9617H240.46C234.43 83.9617 229.281 78.8133 229.281 72.7833V67.6349C229.281 60.8996 234.43 55.998 240.46 55.998H246.067C252.344 55.998 257.245 50.8496 257.245 44.7843V39.1774C257.245 32.9006 252.308 27.9637 246.067 27.9637H240.46C234.43 27.9637 229.281 22.8153 229.281 16.7853V11.1784C229.281 4.90159 224.345 0 218.068 0H212.496C206.431 0 201.282 4.93685 201.282 11.1784V67.5996V67.6701Z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+
+            {/* Right: Text Container */}
+            <div className="about-text-container">
+              {/* Eyebrow */}
+              <p className="about-eyebrow">
+                WIT: CELEBRATING 25 YEARS IN 2026!
+              </p>
+
+              {/* Editorial Text Block: Each line lights up individually */}
+              <div className="about-text-block">
+                <div className="about-lines-group">
+                  {/* Line 1: Turns white first */}
+                  <span
+                    className={`reveal-line ${scrollProgress >= 0.1 ? "revealed" : ""}`}
+                  >
+                    25 years driving Telecom Innovation.
+                  </span>
+
+                  {/* Line 2: Turns white second */}
+                  <span
+                    className={`reveal-line ${scrollProgress >= 0.3 ? "revealed" : ""}`}
+                  >
+                    Software deployed in over 40 countries.
+                  </span>
+
+                  {/* Line 3: Turns white third */}
+                  <span
+                    className={`reveal-line ${scrollProgress >= 0.5 ? "revealed" : ""}`}
+                  >
+                    Trusted by Tier-1 operators worldwide.
+                  </span>
+
+                  {/* Line 4: Turns white fourth */}
+                  <span
+                    className={`reveal-line ${scrollProgress >= 0.7 ? "revealed" : ""}`}
+                  >
+                    Built on deep telecom DNA.
+                  </span>
+                </div>
+
+                {/* Line 5: Turns white last */}
+                <div className="about-future-group">
+                  <span
+                    className={`reveal-line ${scrollProgress >= 0.9 ? "revealed" : ""}`}
+                  >
+                    Now Engineering the future of Telecom AI.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default AboutStats;
