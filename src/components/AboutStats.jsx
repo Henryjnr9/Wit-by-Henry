@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-// Organized line-by-line matching the Figma layout
+// Line-by-line structure matching Figma
 const mainParagraphLines = [
   ["25", "years", "driving", "Telecom", "Innovation."],
   ["Software", "deployed", "in", "over", "40", "countries."],
@@ -9,10 +9,18 @@ const mainParagraphLines = [
 ];
 
 const futureParagraphLines = [
-  ["Now", "Engineering", "the", "future", "of", "Telecom", "AI."],
+  [
+    "Now",
+    "Engineering",
+    "the",
+    "future",
+    "of",
+    "Telecom",
+    "Artificial",
+    "Intelligence.",
+  ],
 ];
 
-// Total word count for calculating sequential progression
 const allWords = [...mainParagraphLines.flat(), ...futureParagraphLines.flat()];
 const totalWordCount = allWords.length;
 
@@ -26,7 +34,6 @@ const AboutStats = () => {
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Active scroll window: triggers smoothly through the section
       const start = windowHeight * 0.85;
       const end = windowHeight * 0.2;
       const totalDistance = start - end;
@@ -41,7 +48,6 @@ const AboutStats = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Helper to calculate the 3-phase color per word
   const getWordColor = (globalIndex) => {
     const threshLightGrey = (globalIndex / totalWordCount) * 0.7 + 0.08;
     const threshWhite = (globalIndex / totalWordCount) * 0.7 + 0.18;
@@ -60,49 +66,55 @@ const AboutStats = () => {
   return (
     <>
       <style>{`
-        /* About Section (48px padding for tight section rhythm) */
+        /* About Section */
         .about-section {
           padding-top: 48px;
           padding-bottom: 48px;
           position: relative;
           box-sizing: border-box;
+          overflow: hidden;
         }
 
         /* 
           Layout Container:
-          justify-content: space-between keeps the logo on the left 
-          and the text pinned to the right margin
+          justify-content: space-between anchors logo on left, text on right
         */
         .about-layout {
           display: flex;
           width: 100%;
           justify-content: space-between;
           align-items: flex-start;
+          gap: clamp(32px, 5vw, 80px);
           box-sizing: border-box;
         }
 
-        /* WIT Logo: width 257.245px, height 111.996px */
+        /* WIT Logo: scales smoothly without pushing content out */
         .about-logo-wrapper {
-          width: 257.245px;
-          height: 111.996px;
+          width: clamp(200px, 18vw, 257.245px);
+          height: auto;
           flex-shrink: 0;
-          margin-top: 96px;
+          margin-top: clamp(40px, 6vw, 96px);
         }
 
         .about-logo-svg {
           width: 100%;
-          height: 100%;
+          height: auto;
           display: block;
         }
 
-        /* Text Container: width 882px, gap 16px */
+        /* 
+          Text Container:
+          min-width: 0 prevents flex child from expanding outside margin
+        */
         .about-text-container {
           display: flex;
-          width: 882px;
-          max-width: 100%;
+          flex: 1 1 0;
+          min-width: 0; /* CRITICAL: stops flex overflow */
+          max-width: 882px;
           flex-direction: column;
           align-items: flex-start;
           gap: 16px;
+          box-sizing: border-box;
         }
 
         /* Eyebrow: WIT: CELEBRATING 25 YEARS IN 2026! */
@@ -117,26 +129,33 @@ const AboutStats = () => {
           margin: 0;
         }
 
-        /* 48px Editorial Text Block */
+        /* 
+          Editorial Text Block:
+          clamp(36px, 3.3vw, 48px) ensures lines fit comfortably inside the margins
+        */
         .about-text-block {
           width: 100%;
-          font-family: 'Geist', sans-serif;
-          font-size: 48px;
+          font-size: clamp(36px, 3.3vw, 48px);
           font-style: normal;
           font-weight: 500;
-          line-height: 48px; /* 100% */
+          line-height: 1.15;
           letter-spacing: -0.96px;
           margin: 0;
           display: flex;
           flex-direction: column;
+          box-sizing: border-box;
         }
 
-        /* Individual Line Container */
+        /* 
+          Each line is a block element that naturally sits on its own line,
+          without forcing white-space: nowrap (which caused the overflow)
+        */
         .about-line {
           display: block;
           margin: 0;
-          line-height: 48px;
-          white-space: nowrap;
+          line-height: 1.15;
+          word-break: normal;
+          overflow-wrap: break-word;
         }
 
         /* Word Span with smooth color transition */
@@ -145,23 +164,12 @@ const AboutStats = () => {
           transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 48px gap separating the future paragraph */
+        /* Future paragraph separation */
         .about-future-group {
-          margin-top: 48px;
+          margin-top: clamp(28px, 3vw, 48px);
         }
 
         /* Responsive Breakpoints */
-        @media (max-width: 1200px) {
-          .about-text-container,
-          .about-text-block {
-            width: 100%;
-          }
-
-          .about-line {
-            white-space: normal;
-          }
-        }
-
         @media (max-width: 900px) {
           .about-section {
             padding-top: 40px;
@@ -170,28 +178,22 @@ const AboutStats = () => {
 
           .about-layout {
             flex-direction: column;
-            gap: 40px;
+            gap: 36px;
           }
 
           .about-logo-wrapper {
             margin-top: 0;
             width: 180px;
-            height: auto;
           }
 
           .about-text-block {
-            font-size: 32px;
-            line-height: 38px;
-            letter-spacing: -0.64px;
-          }
-
-          .about-line {
-            line-height: 38px;
-            white-space: normal;
+            font-size: 28px;
+            line-height: 34px;
+            letter-spacing: -0.5px;
           }
 
           .about-future-group {
-            margin-top: 28px;
+            margin-top: 24px;
           }
         }
       `}</style>
@@ -204,8 +206,6 @@ const AboutStats = () => {
               <svg
                 className="about-logo-svg"
                 xmlns="http://www.w3.org/2000/svg"
-                width="258"
-                height="112"
                 viewBox="0 0 258 112"
                 fill="none"
               >
@@ -216,14 +216,14 @@ const AboutStats = () => {
               </svg>
             </div>
 
-            {/* Right: Text Container */}
+            {/* Right: Text Container with min-width: 0 constraint */}
             <div className="about-text-container">
               <p className="about-eyebrow">
                 WIT: CELEBRATING 25 YEARS IN 2026!
               </p>
 
               <div className="about-text-block">
-                {/* Main 4 lines: rendered line-by-line, animated word-by-word */}
+                {/* Lines with safe text wrap */}
                 <div className="about-lines-group">
                   {mainParagraphLines.map((lineWords, lineIdx) => (
                     <div key={lineIdx} className="about-line">
@@ -244,7 +244,7 @@ const AboutStats = () => {
                   ))}
                 </div>
 
-                {/* Future statement line: animated word-by-word */}
+                {/* Future statement line */}
                 <div className="about-future-group">
                   {futureParagraphLines.map((lineWords, lineIdx) => (
                     <div key={lineIdx} className="about-line">
