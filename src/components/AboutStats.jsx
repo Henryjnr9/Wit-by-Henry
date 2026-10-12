@@ -1,5 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 
+// Organized line-by-line matching the Figma layout
+const mainParagraphLines = [
+  ["25", "years", "driving", "Telecom", "Innovation."],
+  ["Software", "deployed", "in", "over", "40", "countries."],
+  ["Trusted", "by", "Tier-1", "operators", "worldwide."],
+  ["Built", "on", "deep", "telecom", "DNA."],
+];
+
+const futureParagraphLines = [
+  ["Now", "Engineering", "the", "future", "of", "Telecom", "AI."],
+];
+
+// Total word count for calculating sequential progression
+const allWords = [...mainParagraphLines.flat(), ...futureParagraphLines.flat()];
+const totalWordCount = allWords.length;
+
 const AboutStats = () => {
   const sectionRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -10,9 +26,9 @@ const AboutStats = () => {
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Generous scroll trigger window (from 85% down viewport to 15% from top)
+      // Active scroll window: triggers smoothly through the section
       const start = windowHeight * 0.85;
-      const end = windowHeight * 0.15;
+      const end = windowHeight * 0.2;
       const totalDistance = start - end;
       const currentPos = start - rect.top;
 
@@ -25,36 +41,52 @@ const AboutStats = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Helper to calculate the 3-phase color per word
+  const getWordColor = (globalIndex) => {
+    const threshLightGrey = (globalIndex / totalWordCount) * 0.7 + 0.08;
+    const threshWhite = (globalIndex / totalWordCount) * 0.7 + 0.18;
+
+    if (scrollProgress >= threshWhite) {
+      return "#F4F7FF"; // Phase 3: Pure Light / White
+    }
+    if (scrollProgress >= threshLightGrey) {
+      return "#8B8E96"; // Phase 2: Light Grey
+    }
+    return "#424243"; // Phase 1: Dark Grey
+  };
+
+  let globalWordIndex = 0;
+
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=swap');
-
-        /* About Section (93px from logos to text, 81px to next section) */
+        /* About Section (48px padding for tight section rhythm) */
         .about-section {
-          padding-top: 64px;
-          padding-bottom: 64px;
+          padding-top: 48px;
+          padding-bottom: 48px;
           position: relative;
           box-sizing: border-box;
         }
 
-        /* Layout Container */
+        /* 
+          Layout Container:
+          justify-content: space-between keeps the logo on the left 
+          and the text pinned to the right margin
+        */
         .about-layout {
           display: flex;
           width: 100%;
-         justify-content: space-between;
-          margin: 0 auto;
+          justify-content: space-between;
           align-items: flex-start;
-          gap: 140.75px; /* Exact Figma gap */
           box-sizing: border-box;
         }
 
-        /* WIT Logo (width: 257.245px, height: 111.996px) */
+        /* WIT Logo: width 257.245px, height 111.996px */
         .about-logo-wrapper {
           width: 257.245px;
           height: 111.996px;
           flex-shrink: 0;
-          margin-top: 96px; /* 189px - 93px = 96px exact top offset */
+          margin-top: 96px;
         }
 
         .about-logo-svg {
@@ -63,10 +95,11 @@ const AboutStats = () => {
           display: block;
         }
 
-        /* Text Container (882px with 16px gap to eyebrow) */
+        /* Text Container: width 882px, gap 16px */
         .about-text-container {
           display: flex;
           width: 882px;
+          max-width: 100%;
           flex-direction: column;
           align-items: flex-start;
           gap: 16px;
@@ -79,14 +112,14 @@ const AboutStats = () => {
           font-size: 16px;
           font-style: normal;
           font-weight: 500;
-          line-height: 24px; /* 150% */
+          line-height: 24px;
           letter-spacing: -0.32px;
           margin: 0;
         }
 
         /* 48px Editorial Text Block */
         .about-text-block {
-          width: 882px;
+          width: 100%;
           font-family: 'Geist', sans-serif;
           font-size: 48px;
           font-style: normal;
@@ -98,48 +131,41 @@ const AboutStats = () => {
           flex-direction: column;
         }
 
-        /* Paragraph groups */
-        .about-lines-group {
-          display: flex;
-          flex-direction: column;
-          gap: 0px;
-        }
-
-        /* Individual line that lights up independently */
-        .reveal-line {
-          color: #424243;
+        /* Individual Line Container */
+        .about-line {
           display: block;
           margin: 0;
           line-height: 48px;
-          transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          white-space: nowrap;
         }
 
-        /* Illuminated active state */
-        .reveal-line.revealed {
-          color: #F4F7FF;
+        /* Word Span with smooth color transition */
+        .reveal-word {
+          display: inline;
+          transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Second paragraph ("Now Engineering...") has one line height separation */
+        /* 48px gap separating the future paragraph */
         .about-future-group {
           margin-top: 48px;
         }
 
         /* Responsive Breakpoints */
         @media (max-width: 1200px) {
-          .about-layout {
-            gap: 60px;
-          }
-
           .about-text-container,
           .about-text-block {
             width: 100%;
+          }
+
+          .about-line {
+            white-space: normal;
           }
         }
 
         @media (max-width: 900px) {
           .about-section {
-            padding-top: 60px;
-            padding-bottom: 60px;
+            padding-top: 40px;
+            padding-bottom: 40px;
           }
 
           .about-layout {
@@ -159,8 +185,9 @@ const AboutStats = () => {
             letter-spacing: -0.64px;
           }
 
-          .reveal-line {
+          .about-line {
             line-height: 38px;
+            white-space: normal;
           }
 
           .about-future-group {
@@ -191,50 +218,51 @@ const AboutStats = () => {
 
             {/* Right: Text Container */}
             <div className="about-text-container">
-              {/* Eyebrow */}
               <p className="about-eyebrow">
                 WIT: CELEBRATING 25 YEARS IN 2026!
               </p>
 
-              {/* Editorial Text Block: Each line lights up individually */}
               <div className="about-text-block">
+                {/* Main 4 lines: rendered line-by-line, animated word-by-word */}
                 <div className="about-lines-group">
-                  {/* Line 1: Turns white first */}
-                  <span
-                    className={`reveal-line ${scrollProgress >= 0.1 ? "revealed" : ""}`}
-                  >
-                    25 years driving Telecom Innovation.
-                  </span>
-
-                  {/* Line 2: Turns white second */}
-                  <span
-                    className={`reveal-line ${scrollProgress >= 0.3 ? "revealed" : ""}`}
-                  >
-                    Software deployed in over 40 countries.
-                  </span>
-
-                  {/* Line 3: Turns white third */}
-                  <span
-                    className={`reveal-line ${scrollProgress >= 0.5 ? "revealed" : ""}`}
-                  >
-                    Trusted by Tier-1 operators worldwide.
-                  </span>
-
-                  {/* Line 4: Turns white fourth */}
-                  <span
-                    className={`reveal-line ${scrollProgress >= 0.7 ? "revealed" : ""}`}
-                  >
-                    Built on deep telecom DNA.
-                  </span>
+                  {mainParagraphLines.map((lineWords, lineIdx) => (
+                    <div key={lineIdx} className="about-line">
+                      {lineWords.map((word, wordIdx) => {
+                        const wordColor = getWordColor(globalWordIndex);
+                        globalWordIndex++;
+                        return (
+                          <span
+                            key={wordIdx}
+                            className="reveal-word"
+                            style={{ color: wordColor }}
+                          >
+                            {word}{" "}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
 
-                {/* Line 5: Turns white last */}
+                {/* Future statement line: animated word-by-word */}
                 <div className="about-future-group">
-                  <span
-                    className={`reveal-line ${scrollProgress >= 0.9 ? "revealed" : ""}`}
-                  >
-                    Now Engineering the future of Telecom AI.
-                  </span>
+                  {futureParagraphLines.map((lineWords, lineIdx) => (
+                    <div key={lineIdx} className="about-line">
+                      {lineWords.map((word, wordIdx) => {
+                        const wordColor = getWordColor(globalWordIndex);
+                        globalWordIndex++;
+                        return (
+                          <span
+                            key={wordIdx}
+                            className="reveal-word"
+                            style={{ color: wordColor }}
+                          >
+                            {word}{" "}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
