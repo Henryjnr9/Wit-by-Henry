@@ -7,7 +7,7 @@ const Products = () => {
         /* Products Section */
         .products-section {
           padding-top: 48px;
-          padding-bottom: 48px;
+          padding-bottom: 64px;
           position: relative;
           box-sizing: border-box;
         }
@@ -204,9 +204,9 @@ const Products = () => {
 
         .product-card-desc {
           align-self: stretch;
-          color: #ABABAB;
+          color: #969696;
           
-          font-size: 14px;
+          font-size: 16px;
           font-style: normal;
           font-weight: 400;
           line-height: 25px;
