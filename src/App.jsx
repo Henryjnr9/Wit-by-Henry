@@ -14,15 +14,16 @@ import Footer from "./components/Footer";
 
 function App() {
   useEffect(() => {
-    // Configure Lenis for a slow, weighted, and silky smooth glide
+    // Configured for smooth scrolling on BOTH desktop and mobile/touch
     const lenis = new Lenis({
-      duration: 1.5, // Higher number = slower and smoother glide (default is 1.2)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential ease-out
+      duration: 1.5,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      syncTouch: true, // Enables smooth touch scroll on mobile
+      syncTouchLerp: 0.08, // Gives mobile the weighted deceleration
+      touchMultiplier: 1.5, // Touch sensitivity
     });
 
-    // Animation frame loop
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -30,7 +31,7 @@ function App() {
 
     const rafId = requestAnimationFrame(raf);
 
-    // Smoothly intercept any anchor links (e.g. clicking #about or #products in the navbar)
+    // Smoothly scroll to anchor targets when clicking links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (e) => {
         const href = anchor.getAttribute("href");
@@ -52,36 +53,36 @@ function App() {
 
   return (
     <div className="app">
-      {/* 1. Fixed Navbar */}
+      {/* 1. Fixed Navbar with Mobile Pill Drawer */}
       <Navbar />
 
       <main>
         {/* 2. Hero Section */}
         <Hero />
 
-        {/* 3. Infinite Logos Banner */}
+        {/* 3. Infinite Scrolling Logos Banner */}
         <LogosBanner />
 
         {/* 4. About / Telecom Innovation Stats */}
         <AboutStats />
 
-        {/* 5. Products Bento Grid */}
+        {/* 5. Products 3-Column Grid */}
         <Products />
 
-        {/* 6. Expertise Interactive Section */}
+        {/* 6. Expertise Section */}
         <Expertise />
 
         {/* 7. Innovation Legacy Mosaic */}
         <InnovationLegacy />
 
-        {/* 8. Testimonial Quote */}
+        {/* 8. Multi-Testimonial Swipeable Section */}
         <TestimonialQuote />
 
         {/* 9. Bottom CTA Banner */}
         <CtaBanner />
       </main>
 
-      {/* 10. Global Footer */}
+      {/* 10. Responsive Footer */}
       <Footer />
     </div>
   );
