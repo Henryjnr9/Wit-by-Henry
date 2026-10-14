@@ -8,7 +8,7 @@
   --border-subtle: rgba(255, 255, 255, 0.1);
   --accent-lime: #d8ff36;
   --accent-cyan: #00e5ff;
-  --desktop-padding: 24px;
+  --desktop-padding: 40px;
 }
 
 * {
