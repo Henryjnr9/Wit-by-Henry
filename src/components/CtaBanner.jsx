@@ -72,7 +72,7 @@ const CtaBanner = () => {
         .cta-eyebrow {
           color: #232323;
           text-align: center;
-          font-family: 'Geist', sans-serif;
+         
           font-size: 32px;
           font-style: normal;
           font-weight: 400;
@@ -85,7 +85,7 @@ const CtaBanner = () => {
         .cta-heading {
           color: #232323;
           text-align: center;
-          font-family: 'Geist', sans-serif;
+         
           font-size: 48px;
           font-style: normal;
           font-weight: 500;
@@ -119,7 +119,7 @@ const CtaBanner = () => {
         /* Button text */
         .cta-btn-text {
           color: #FFFFFF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 500;

@@ -34,7 +34,7 @@ const Hero = () => {
         .hero-headline {
           width: 457px;
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+       
           font-size: 80px;
           font-style: normal;
           font-weight: 500;
@@ -46,7 +46,7 @@ const Hero = () => {
         .hero-subtext {
           width: 571px;
           color: #ABABAB;
-          font-family: 'Geist', sans-serif;
+         
           font-size: 18px;
           font-style: normal;
           font-weight: 400;
@@ -70,7 +70,7 @@ const Hero = () => {
           border-radius: 23px;
           background: #FFFFFF;
           color: #111111;
-          font-family: 'Geist', sans-serif;
+         
           font-size: 14px;
           font-weight: 500;
           text-decoration: none;
@@ -94,7 +94,7 @@ const Hero = () => {
           border: 1px solid #343434;
           background: #232323;
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 14px;
           font-weight: 500;
           text-decoration: none;

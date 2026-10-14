@@ -37,7 +37,7 @@ const Products = () => {
 
         .products-title {
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 48px;
           font-style: normal;
           font-weight: 500;
@@ -69,7 +69,7 @@ const Products = () => {
 
         .btn-see-all-text {
           color: #FFFFFF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 14px;
           font-style: normal;
           font-weight: 500;
@@ -95,7 +95,7 @@ const Products = () => {
           width: 571px;
           max-width: 100%;
           color: #ABABAB;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 400;
@@ -189,7 +189,7 @@ const Products = () => {
           width: 100%;
           align-self: stretch;
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 28px;
           font-style: normal;
           font-weight: 500;
@@ -205,7 +205,7 @@ const Products = () => {
         .product-card-desc {
           align-self: stretch;
           color: #ABABAB;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 14px;
           font-style: normal;
           font-weight: 400;

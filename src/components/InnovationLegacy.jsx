@@ -160,7 +160,7 @@ const InnovationLegacy = () => {
 
         .legacy-title {
           align-self: stretch;
-          font-family: 'Geist', sans-serif;
+         
           font-size: 48px;
           font-style: normal;
           font-weight: 500;
@@ -197,7 +197,7 @@ const InnovationLegacy = () => {
 
         .legacy-btn-text {
           color: #FFFFFF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 500;

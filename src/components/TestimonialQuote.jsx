@@ -207,7 +207,7 @@ const TestimonialQuote = () => {
         */
         .quote-text-block {
           align-self: stretch;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 48px;
           font-style: normal;
           font-weight: 500;
@@ -268,7 +268,7 @@ const TestimonialQuote = () => {
 
         .founder-name {
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 500;
@@ -336,7 +336,7 @@ const TestimonialQuote = () => {
         /* Desktop: Giant 600px Quote Mark Glyph on the right */
         .quote-mark-glyph {
           color: #424242;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 600px;
           font-style: normal;
           font-weight: 500;

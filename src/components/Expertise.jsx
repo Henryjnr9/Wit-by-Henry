@@ -211,7 +211,7 @@ const Expertise = () => {
 
         .expertise-heading {
           color: #F4F7FF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 72px;
           font-style: normal;
           font-weight: 500;
@@ -260,7 +260,7 @@ const Expertise = () => {
         .item-number-prefix {
           display: inline-flex;
           align-items: center;
-          font-family: 'Geist', sans-serif;
+        
           font-size: 18px;
           font-style: normal;
           font-weight: 500;
@@ -285,7 +285,7 @@ const Expertise = () => {
         }
 
         .item-label {
-          font-family: 'Geist', sans-serif;
+         
           font-size: 40px;
           font-style: normal;
           font-weight: 500;
@@ -318,7 +318,7 @@ const Expertise = () => {
         .expertise-desc-text {
           align-self: stretch;
           color: #ABABAB;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 400;
@@ -503,7 +503,7 @@ const Expertise = () => {
           .mobile-desc-p {
             align-self: stretch;
             color: #ABABAB;
-            font-family: 'Geist', sans-serif;
+          
             font-size: 16px;
             font-style: normal;
             font-weight: 400;

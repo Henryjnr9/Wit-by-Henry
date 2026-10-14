@@ -73,7 +73,7 @@ const Footer = () => {
         */
         .footer-nav-link {
           color: #FFFFFF;
-          font-family: 'Geist', sans-serif;
+          
           font-size: 18px;
           font-style: normal;
           font-weight: 400;
@@ -195,7 +195,7 @@ const Footer = () => {
         */
         .footer-legal-link {
           color: #ABABAB;
-          font-family: 'Geist', sans-serif;
+        
           font-size: 14px;
           font-style: normal;
           font-weight: 500;
