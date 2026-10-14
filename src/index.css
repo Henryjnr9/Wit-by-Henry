@@ -8,7 +8,7 @@
   --border-subtle: rgba(255, 255, 255, 0.1);
   --accent-lime: #d8ff36;
   --accent-cyan: #00e5ff;
-  --desktop-padding: 40px;
+  --desktop-padding: 24px;
 }
 
 * {
@@ -107,7 +107,7 @@ html.lenis body {
 
 @media (max-width: 600px) {
   :root {
-    --desktop-padding: 20px;
+    --desktop-padding: 24px;
   }
 }
 
