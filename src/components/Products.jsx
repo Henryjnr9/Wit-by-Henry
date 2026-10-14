@@ -6,7 +6,7 @@ const Products = () => {
       <style>{`
         /* Products Section */
         .products-section {
-          padding-top: 64px;
+          padding-top: 48px;
           padding-bottom: 48px;
           position: relative;
           box-sizing: border-box;
@@ -20,7 +20,7 @@ const Products = () => {
           box-sizing: border-box;
         }
 
-        /* Top Header Row */
+        /* Desktop Header Row */
         .products-header-row {
           display: flex;
           justify-content: space-between;
@@ -46,6 +46,7 @@ const Products = () => {
           margin: 0;
         }
 
+        /* See All Button */
         .btn-see-all {
           display: inline-flex;
           padding: 6px 16px;
@@ -86,6 +87,10 @@ const Products = () => {
           transform: translateX(3px);
         }
 
+        .btn-see-all-mobile {
+          display: none;
+        }
+
         .products-subtext {
           width: 571px;
           max-width: 100%;
@@ -99,7 +104,7 @@ const Products = () => {
           margin: 0;
         }
 
-        /* 3-Column Grid Row */
+        /* Desktop: 3-Column Grid Row */
         .products-grid-row {
           display: flex;
           width: 100%;
@@ -143,6 +148,7 @@ const Products = () => {
           pointer-events: none;
         }
 
+        /* 1. Lime Silk Mesh */
         .cover-lime {
           background: 
             radial-gradient(ellipse 90% 80% at 20% 25%, #CEF535 0%, rgba(206, 245, 53, 0) 65%),
@@ -151,6 +157,7 @@ const Products = () => {
             linear-gradient(135deg, #CEF535 0%, #1565D8 100%);
         }
 
+        /* 2. Electric Cyan */
         .cover-cyan {
           background: 
             radial-gradient(ellipse 90% 70% at 15% 30%, #00EAFF 0%, rgba(0, 234, 255, 0) 65%),
@@ -159,6 +166,7 @@ const Products = () => {
             linear-gradient(135deg, #00A3FF 0%, #082D7B 100%);
         }
 
+        /* 3. Soft Lavender */
         .cover-lavender {
           background: 
             radial-gradient(ellipse 80% 80% at 20% 20%, #E8D9FF 0%, rgba(232, 217, 255, 0) 65%),
@@ -173,14 +181,10 @@ const Products = () => {
           overflow: hidden;
           flex-direction: column;
           align-items: flex-start;
-          gap: 8px;
+          gap: 4px;
           align-self: stretch;
         }
 
-        /* 
-          1-Line Strict Truncation:
-          white-space: nowrap, overflow: hidden, text-overflow: ellipsis
-        */
         .product-card-title {
           width: 100%;
           align-self: stretch;
@@ -192,9 +196,9 @@ const Products = () => {
           line-height: 32px;
           letter-spacing: -0.56px;
           margin: 0;
-          white-space: nowrap;       /* Strictly 1 line */
-          overflow: hidden;          /* Clips any extra text */
-          text-overflow: ellipsis;   /* Adds '...' if title exceeds 1 line */
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           box-sizing: border-box;
         }
 
@@ -202,7 +206,7 @@ const Products = () => {
           align-self: stretch;
           color: #ABABAB;
           font-family: 'Geist', sans-serif;
-          font-size: 16px;
+          font-size: 14px;
           font-style: normal;
           font-weight: 400;
           line-height: 25px;
@@ -210,38 +214,90 @@ const Products = () => {
           margin: 0;
         }
 
-        @media (max-width: 1024px) {
+        /* ================= MOBILE RESPONSIVE (<= 768px) ================= */
+        @media (max-width: 768px) {
+          .products-section {
+            padding-top: 40px;
+            padding-bottom: 40px;
+          }
+
+          /* 
+            Header Container on Mobile:
+            width 358px, column, gap 16px
+          */
           .products-header-row {
             flex-direction: column;
-            gap: 24px;
+            align-items: flex-start;
+            gap: 16px;
+            width: 358px;
+            max-width: 100%;
           }
 
-          .products-grid-row {
-            gap: 24px;
-          }
-
-          .product-cover {
-            height: 360px;
-          }
-
-          .product-card-title {
-            font-size: 22px;
-            line-height: 28px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .products-grid-row {
-            flex-direction: column;
-            gap: 40px;
-          }
-
-          .product-column-card {
+          .products-header-left {
+            gap: 0;
             width: 100%;
           }
 
+          /* Exact Mobile Products Title: 32px, line-height 36px, letter-spacing -0.64px */
+          .products-title {
+            font-size: 32px;
+            line-height: 36px;
+            letter-spacing: -0.64px;
+          }
+
+          .products-subtext {
+            width: 100%;
+            font-size: 16px;
+            line-height: 22px;
+            letter-spacing: -0.17px;
+          }
+
+          /* Show button under subtext on mobile */
+          .btn-see-all-desktop {
+            display: none;
+          }
+
+          .btn-see-all-mobile {
+            display: inline-flex;
+            margin-top: 4px;
+          }
+
+          /* Stack cards vertically */
+          .products-grid-row {
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 36px;
+          }
+
+          /* Container for each product card */
+          .product-column-card {
+            width: 100%;
+            gap: 19px;
+          }
+
+          /* Mobile product banner */
           .product-cover {
-            height: 300px;
+            height: 210px;
+            border-radius: 8px;
+          }
+
+          .product-text-box {
+            gap: 6px;
+          }
+
+          /* Exact Mobile Title: width 259px, 20px, line-height 24px, letter-spacing -0.4px */
+          .product-card-title {
+            width: 259px;
+            max-width: 100%;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: -0.4px;
+            white-space: normal; /* Allows natural wrap onto 2 lines matching screenshot */
+          }
+
+          .product-card-desc {
+            font-size: 14px;
+            line-height: 22px;
           }
         }
       `}</style>
@@ -253,8 +309,11 @@ const Products = () => {
             <div className="products-header-row">
               <div className="products-header-left">
                 <h2 className="products-title">Products</h2>
-
-                <a href="#all-products" className="btn-see-all">
+                {/* Desktop Button */}
+                <a
+                  href="#all-products"
+                  className="btn-see-all btn-see-all-desktop"
+                >
                   <span className="btn-see-all-text">See All</span>
                   <svg
                     className="btn-see-all-icon"
@@ -279,20 +338,39 @@ const Products = () => {
                 Carrier-grade telecom platforms for Agentic AI Communications,
                 5G interactive calling, and business messaging.
               </p>
+
+              {/* Mobile Button placed beneath subtext */}
+              <a
+                href="#all-products"
+                className="btn-see-all btn-see-all-mobile"
+              >
+                <span className="btn-see-all-text">See All</span>
+                <svg
+                  className="btn-see-all-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M5 12H19M19 12L12 5M19 12L12 19"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
             </div>
 
-            {/* 3-Column Grid Row */}
+            {/* Products Cards */}
             <div className="products-grid-row">
-              {/* Card 1 */}
+              {/* Card 1: Lime */}
               <div className="product-column-card">
                 <div className="product-cover cover-lime"></div>
                 <div className="product-text-box">
-                  <h3
-                    className="product-card-title"
-                    title="WIT AINNOV8 Platform"
-                  >
-                    WIT AINNOV8 Platform
-                  </h3>
+                  <h3 className="product-card-title">WIT AINNOV8 Platform</h3>
                   <p className="product-card-desc">
                     Platform for Agentic AI Communications built for telecom
                     operators.
@@ -300,14 +378,11 @@ const Products = () => {
                 </div>
               </div>
 
-              {/* Card 2 */}
+              {/* Card 2: Cyan */}
               <div className="product-column-card">
                 <div className="product-cover cover-cyan"></div>
                 <div className="product-text-box">
-                  <h3
-                    className="product-card-title"
-                    title="WIT 5G New Calling Platform"
-                  >
+                  <h3 className="product-card-title">
                     WIT 5G New Calling Platform
                   </h3>
                   <p className="product-card-desc">
@@ -317,14 +392,11 @@ const Products = () => {
                 </div>
               </div>
 
-              {/* Card 3 */}
+              {/* Card 3: Lavender */}
               <div className="product-column-card">
                 <div className="product-cover cover-lavender"></div>
                 <div className="product-text-box">
-                  <h3
-                    className="product-card-title"
-                    title="WIT RCS Business Messaging Platform"
-                  >
+                  <h3 className="product-card-title">
                     WIT RCS Business Messaging Platform
                   </h3>
                   <p className="product-card-desc">

@@ -56,7 +56,7 @@ const expertiseData = [
 const ITEM_HEIGHT = 73;
 
 const Expertise = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0); // Starts on RCS Messaging (01)
   const trackRef = useRef(null);
   const N = expertiseData.length;
 
@@ -74,6 +74,8 @@ const Expertise = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Only run scroll calculation on desktop (width > 768px)
+      if (window.innerWidth <= 768) return;
       if (!trackRef.current) return;
       const rect = trackRef.current.getBoundingClientRect();
       const totalScrollable = rect.height - window.innerHeight;
@@ -96,9 +98,78 @@ const Expertise = () => {
   const currentItem = expertiseData[activeIndex];
   const translateY = -(activeIndex * ITEM_HEIGHT);
 
+  // Helper to render abstract animations
+  const renderAbstractAnimation = (type) => {
+    switch (type) {
+      case "rcs":
+        return (
+          <div className="anim-rcs-wrapper">
+            <div className="rcs-pill pill-1"></div>
+            <div className="rcs-pill pill-2"></div>
+            <div className="rcs-pill pill-3"></div>
+          </div>
+        );
+      case "unified":
+        return (
+          <svg
+            className="anim-unified-wrapper"
+            viewBox="0 0 100 100"
+            fill="none"
+            stroke="rgba(255,255,255,0.7)"
+            strokeWidth="2"
+          >
+            <polygon points="50,10 90,50 50,90 10,50" />
+            <circle cx="50" cy="50" r="22" stroke="white" strokeWidth="2.5" />
+            <line x1="10" y1="50" x2="90" y2="50" />
+            <line x1="50" y1="10" x2="50" y2="90" />
+          </svg>
+        );
+      case "video":
+        return (
+          <svg className="anim-video-wrapper" viewBox="0 0 200 100" fill="none">
+            <path
+              className="video-path"
+              d="M10 50 Q 55 10, 100 50 T 190 50"
+              stroke="white"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+            <path
+              className="video-path"
+              d="M10 50 Q 55 90, 100 50 T 190 50"
+              stroke="rgba(255,255,255,0.45)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+        );
+      case "agentic":
+        return (
+          <div className="anim-agentic-wrapper">
+            <div className="agentic-ring ring-1"></div>
+            <div className="agentic-ring ring-2"></div>
+            <div className="agentic-core"></div>
+          </div>
+        );
+      case "newcalling":
+        return (
+          <div className="anim-calling-wrapper">
+            <div className="calling-bar bar-1"></div>
+            <div className="calling-bar bar-2"></div>
+            <div className="calling-bar bar-3"></div>
+            <div className="calling-bar bar-4"></div>
+            <div className="calling-bar bar-5"></div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <style>{`
+        /* Desktop Base */
         .expertise-scroll-track {
           position: relative;
           height: 550vh;
@@ -128,7 +199,6 @@ const Expertise = () => {
           box-sizing: border-box;
         }
 
-        /* Widened left column to prevent long titles from pushing the number off-screen */
         .expertise-left-col {
           width: clamp(490px, 38vw, 540px);
           flex-shrink: 0;
@@ -187,11 +257,6 @@ const Expertise = () => {
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 
-          Number Prefix:
-          Added flex-shrink: 0 and removed negative transform
-          so it CANNOT be squished or cut off by long text
-        */
         .item-number-prefix {
           display: inline-flex;
           align-items: center;
@@ -207,7 +272,7 @@ const Expertise = () => {
           width: 0;
           margin-right: 0;
           opacity: 0;
-          flex-shrink: 0; /* Ensures number stays intact */
+          flex-shrink: 0;
           transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                       margin-right 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                       opacity 0.3s ease;
@@ -285,167 +350,61 @@ const Expertise = () => {
           justify-content: center;
         }
 
-        /* Abstract Animations */
-        .anim-rcs-wrapper {
-          position: relative;
-          width: 300px;
-          height: 260px;
-        }
+        /* Abstract Animations Shared Styles */
+        .anim-rcs-wrapper { position: relative; width: 300px; height: 260px; }
+        .rcs-pill { position: absolute; border-radius: 999px; background: rgba(255, 255, 255, 0.35); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.6); animation: floatPill 5s ease-in-out infinite; }
+        .pill-1 { width: 170px; height: 50px; top: 25px; left: 10px; }
+        .pill-2 { width: 140px; height: 44px; top: 100px; right: 15px; background: rgba(255, 255, 255, 0.55); }
+        .pill-3 { width: 190px; height: 54px; bottom: 30px; left: 30px; }
+        @keyframes floatPill { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
 
-        .rcs-pill {
-          position: absolute;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.35);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.6);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-          animation: floatPill 5s ease-in-out infinite;
-        }
-
-        .pill-1 { width: 170px; height: 50px; top: 25px; left: 10px; animation-delay: 0s; }
-        .pill-2 { width: 140px; height: 44px; top: 100px; right: 15px; animation-delay: 1.2s; background: rgba(255, 255, 255, 0.55); }
-        .pill-3 { width: 190px; height: 54px; bottom: 30px; left: 30px; animation-delay: 2.4s; }
-
-        @keyframes floatPill {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-16px); }
-        }
-
-        .anim-unified-wrapper {
-          width: 220px;
-          height: 220px;
-          animation: rotateLattice 18s linear infinite;
-        }
-
+        .anim-unified-wrapper { width: 220px; height: 220px; animation: rotateLattice 18s linear infinite; }
         @keyframes rotateLattice { to { transform: rotate(360deg); } }
 
-        .anim-video-wrapper {
-          width: 300px;
-          height: 180px;
-        }
+        .anim-video-wrapper { width: 300px; height: 180px; }
+        .video-path { stroke-dasharray: 200; animation: flowWave 4s linear infinite; }
+        @keyframes flowWave { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -400; } }
 
-        .video-path {
-          stroke-dasharray: 200;
-          animation: flowWave 4s linear infinite;
-        }
-
-        @keyframes flowWave {
-          from { stroke-dashoffset: 0; }
-          to { stroke-dashoffset: -400; }
-        }
-
-        .anim-agentic-wrapper {
-          position: relative;
-          width: 260px;
-          height: 260px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .agentic-ring {
-          position: absolute;
-          border-radius: 50%;
-          border: 2px dashed rgba(255, 255, 255, 0.4);
-        }
-
-        .ring-1 {
-          width: 210px;
-          height: 210px;
-          animation: spinClockwise 14s linear infinite;
-        }
-
-        .ring-2 {
-          width: 140px;
-          height: 140px;
-          border-style: solid;
-          border-color: rgba(255, 255, 255, 0.6) transparent;
-          animation: spinCounter 8s linear infinite;
-        }
-
-        .agentic-core {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          background: #FFFFFF;
-          box-shadow: 0 0 40px #A855F7, 0 0 75px #C084FC;
-          animation: pulseCore 3s ease-in-out infinite;
-        }
-
+        .anim-agentic-wrapper { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
+        .agentic-ring { position: absolute; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.4); }
+        .ring-1 { width: 210px; height: 210px; animation: spinClockwise 14s linear infinite; }
+        .ring-2 { width: 140px; height: 140px; border-style: solid; border-color: rgba(255, 255, 255, 0.6) transparent; animation: spinCounter 8s linear infinite; }
+        .agentic-core { width: 60px; height: 60px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 0 40px #A855F7, 0 0 75px #C084FC; animation: pulseCore 3s ease-in-out infinite; }
         @keyframes spinClockwise { to { transform: rotate(360deg); } }
         @keyframes spinCounter { to { transform: rotate(-360deg); } }
-        @keyframes pulseCore {
-          0%, 100% { transform: scale(0.9); box-shadow: 0 0 30px #A855F7; }
-          50% { transform: scale(1.15); box-shadow: 0 0 65px #E879F9; }
-        }
+        @keyframes pulseCore { 0%, 100% { transform: scale(0.9); } 50% { transform: scale(1.15); } }
 
-        .anim-calling-wrapper {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          height: 160px;
-        }
-
-        .calling-bar {
-          width: 10px;
-          border-radius: 999px;
-          background: #FFFFFF;
-          animation: soundWave 1.4s ease-in-out infinite alternate;
-        }
-
+        .anim-calling-wrapper { display: flex; align-items: center; justify-content: center; gap: 12px; height: 160px; }
+        .calling-bar { width: 10px; border-radius: 999px; background: #FFFFFF; animation: soundWave 1.4s ease-in-out infinite alternate; }
         .bar-1 { height: 45px; animation-delay: 0.1s; }
         .bar-2 { height: 90px; animation-delay: 0.3s; }
         .bar-3 { height: 140px; animation-delay: 0.5s; }
         .bar-4 { height: 105px; animation-delay: 0.2s; }
         .bar-5 { height: 55px; animation-delay: 0.4s; }
+        @keyframes soundWave { 0% { transform: scaleY(0.4); opacity: 0.6; } 100% { transform: scaleY(1.2); opacity: 1; } }
 
-        @keyframes soundWave {
-          0% { transform: scaleY(0.4); opacity: 0.6; }
-          100% { transform: scaleY(1.2); opacity: 1; }
+        /* Hidden on desktop: mobile accordion content */
+        .mobile-accordion-wrapper {
+          display: none;
         }
 
-        @media (max-width: 1024px) {
-          .expertise-inner-container {
-            gap: 32px;
-          }
-
-          .expertise-heading {
-            font-size: 52px;
-          }
-
-          .expertise-roller-window {
-            margin-top: 60px;
-          }
-
-          .expertise-right-col {
-            margin-top: 40px;
-          }
-
-          .item-label {
-            font-size: 30px;
-            line-height: 38px;
-          }
-
-          .expertise-card {
-            min-height: 360px;
-          }
-        }
-
-        @media (max-width: 868px) {
+        /* ================= MOBILE RESPONSIVE (<= 768px) ================= */
+        @media (max-width: 768px) {
           .expertise-scroll-track {
             height: auto;
+            border-bottom: none;
           }
 
           .expertise-sticky-viewport {
             position: relative;
             height: auto;
             padding: 40px 0;
+            overflow: visible;
           }
 
           .expertise-inner-container {
             flex-direction: column;
-            gap: 40px;
+            gap: 20px;
             max-height: none;
           }
 
@@ -453,30 +412,126 @@ const Expertise = () => {
             width: 100%;
           }
 
+          .expertise-heading {
+            font-size: 36px;
+            line-height: 40px;
+            margin-bottom: 20px;
+          }
+
+          /* Hide the separate right column on mobile */
+          .expertise-right-col {
+            display: none !important;
+          }
+
+          /* Reset roller on mobile to static list flow */
           .expertise-roller-window {
             height: auto;
-            margin-top: 32px;
+            margin-top: 0;
             mask-image: none;
             -webkit-mask-image: none;
+            padding-left: 0;
+            overflow: visible;
           }
 
           .expertise-sliding-track {
             transform: none !important;
           }
 
+          /* Mobile row container */
           .expertise-list-row {
             height: auto;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid #1A1A1A;
+            box-sizing: border-box;
           }
 
+          /* Container housing number and Expertise title (gap: 10px) */
+          .mobile-title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+          }
+
+          /* Inactive Title: 24px, line-height 28px, letter-spacing -0.48px, color #424243 */
           .item-label {
             font-size: 24px;
-            line-height: 30px;
+            line-height: 28px;
+            letter-spacing: -0.48px;
+            color: #424243;
             white-space: normal;
+            transform: none !important;
           }
 
-          .expertise-card {
-            min-height: 280px;
+          /* Active Title: turns #F4F7FF */
+          .expertise-list-row.active .item-label {
+            color: #F4F7FF;
           }
+
+          /* Number badge on mobile */
+          .item-number-prefix {
+            font-size: 20px;
+            line-height: 28px;
+            letter-spacing: -0.48px;
+            color: #F4F7FF;
+          }
+
+          .expertise-list-row.active .item-number-prefix {
+            width: auto;
+            margin-right: 0;
+          }
+
+          /* Show description + 213px card inside the active item */
+          .expertise-list-row.active .mobile-accordion-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            width: 100%;
+            margin-top: 14px;
+            animation: mobileFadeIn 0.35s ease forwards;
+          }
+
+          @keyframes mobileFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          /* Expertise Description text: 16px, line-height 18px, letter-spacing -0.17px */
+          .mobile-desc-p {
+            align-self: stretch;
+            color: #ABABAB;
+            font-family: 'Geist', sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 18px; /* 128.571% */
+            letter-spacing: -0.17px;
+            margin: 0;
+          }
+
+          /* Video Placeholder: height 213px, align-self stretch, radius 8px */
+          .mobile-card-placeholder {
+            height: 213px;
+            align-self: stretch;
+            width: 100%;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
+          }
+
+          /* Scale animations for 213px mobile card */
+          .mobile-card-placeholder .anim-rcs-wrapper { transform: scale(0.8); }
+          .mobile-card-placeholder .anim-unified-wrapper { transform: scale(0.75); }
+          .mobile-card-placeholder .anim-video-wrapper { transform: scale(0.75); }
+          .mobile-card-placeholder .anim-agentic-wrapper { transform: scale(0.75); }
+          .mobile-card-placeholder .anim-calling-wrapper { transform: scale(0.8); }
         }
       `}</style>
 
@@ -484,7 +539,7 @@ const Expertise = () => {
         <div className="expertise-sticky-viewport">
           <div className="section-container">
             <div className="expertise-inner-container">
-              {/* Left Column */}
+              {/* Left Column (List) */}
               <div className="expertise-left-col">
                 <h2 className="expertise-heading">Expertise</h2>
 
@@ -493,9 +548,18 @@ const Expertise = () => {
                     className="expertise-sliding-track"
                     style={{ transform: `translateY(${translateY}px)` }}
                   >
-                    {paddedList.map((item, pIndex) => {
-                      const distance = Math.abs(pIndex - (2 + activeIndex));
-                      const isActive = distance === 0;
+                    {/* On Desktop: padded circular list */}
+                    {/* On Mobile: renders items with in-line accordion */}
+                    {(window.innerWidth <= 768
+                      ? expertiseData
+                      : paddedList
+                    ).map((item, pIndex) => {
+                      const itemIdx =
+                        item.originalIndex !== undefined
+                          ? item.originalIndex
+                          : pIndex;
+                      const distance = Math.abs(itemIdx - activeIndex);
+                      const isActive = itemIdx === activeIndex;
 
                       let itemColor = "#424243";
                       let itemOpacity = 1;
@@ -514,29 +578,63 @@ const Expertise = () => {
                       }
 
                       return (
-                        <button
-                          key={item.uniqueKey}
+                        <div
+                          key={item.uniqueKey || item.id}
                           className={`expertise-list-row ${isActive ? "active" : ""}`}
-                          onClick={() => setActiveIndex(item.originalIndex)}
+                          onClick={() => setActiveIndex(itemIdx)}
                         >
-                          <span className="item-number-prefix">{item.id}.</span>
-                          <span
-                            className="item-label"
-                            style={{
-                              color: itemColor,
-                              opacity: itemOpacity,
-                            }}
-                          >
-                            {item.title}
-                          </span>
-                        </button>
+                          {/* Container housing number and Expertise title */}
+                          <div className="mobile-title-container">
+                            <span className="item-number-prefix">
+                              {item.id}.
+                            </span>
+                            <span
+                              className="item-label"
+                              style={{
+                                color:
+                                  window.innerWidth <= 768
+                                    ? isActive
+                                      ? "#F4F7FF"
+                                      : "#424243"
+                                    : itemColor,
+                                opacity:
+                                  window.innerWidth <= 768
+                                    ? isActive
+                                      ? 1
+                                      : 0.5
+                                    : itemOpacity,
+                              }}
+                            >
+                              {item.title}
+                            </span>
+                          </div>
+
+                          {/* Mobile-only Accordion: Description + 213px Video Card inside the active item */}
+                          {isActive && (
+                            <div className="mobile-accordion-wrapper">
+                              {item.description.map((paragraph, pIdx) => (
+                                <p key={pIdx} className="mobile-desc-p">
+                                  {paragraph}
+                                </p>
+                              ))}
+
+                              {/* 213px Card Placeholder with matching Abstract Animation */}
+                              <div
+                                className="mobile-card-placeholder"
+                                style={{ background: item.gradient }}
+                              >
+                                {renderAbstractAnimation(item.animationType)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
                 </div>
               </div>
 
-              {/* Right Column */}
+              {/* Desktop-only Right Column */}
               <div className="expertise-right-col">
                 <div className="expertise-desc-wrapper">
                   {currentItem.description.map((paragraph, pIdx) => (
@@ -553,80 +651,7 @@ const Expertise = () => {
                   className="expertise-card"
                   style={{ background: currentItem.gradient }}
                 >
-                  {/* 01. RCS Messaging */}
-                  {currentItem.animationType === "rcs" && (
-                    <div className="anim-rcs-wrapper">
-                      <div className="rcs-pill pill-1"></div>
-                      <div className="rcs-pill pill-2"></div>
-                      <div className="rcs-pill pill-3"></div>
-                    </div>
-                  )}
-
-                  {/* 02. Unified Communications */}
-                  {currentItem.animationType === "unified" && (
-                    <svg
-                      className="anim-unified-wrapper"
-                      viewBox="0 0 100 100"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.7)"
-                      strokeWidth="2"
-                    >
-                      <polygon points="50,10 90,50 50,90 10,50" />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="22"
-                        stroke="white"
-                        strokeWidth="2.5"
-                      />
-                      <line x1="10" y1="50" x2="90" y2="50" />
-                      <line x1="50" y1="10" x2="50" y2="90" />
-                    </svg>
-                  )}
-
-                  {/* 03. TV & Video */}
-                  {currentItem.animationType === "video" && (
-                    <svg
-                      className="anim-video-wrapper"
-                      viewBox="0 0 200 100"
-                      fill="none"
-                    >
-                      <path
-                        className="video-path"
-                        d="M10 50 Q 55 10, 100 50 T 190 50"
-                        stroke="white"
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        className="video-path"
-                        d="M10 50 Q 55 90, 100 50 T 190 50"
-                        stroke="rgba(255,255,255,0.45)"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  )}
-
-                  {/* 04. Agentic AI */}
-                  {currentItem.animationType === "agentic" && (
-                    <div className="anim-agentic-wrapper">
-                      <div className="agentic-ring ring-1"></div>
-                      <div className="agentic-ring ring-2"></div>
-                      <div className="agentic-core"></div>
-                    </div>
-                  )}
-
-                  {/* 05. 5G New Calling */}
-                  {currentItem.animationType === "newcalling" && (
-                    <div className="anim-calling-wrapper">
-                      <div className="calling-bar bar-1"></div>
-                      <div className="calling-bar bar-2"></div>
-                      <div className="calling-bar bar-3"></div>
-                      <div className="calling-bar bar-4"></div>
-                      <div className="calling-bar bar-5"></div>
-                    </div>
-                  )}
+                  {renderAbstractAnimation(currentItem.animationType)}
                 </div>
               </div>
             </div>

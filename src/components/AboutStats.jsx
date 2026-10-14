@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-// Line-by-line structure matching Figma
+// Organized line-by-line matching the Figma layout
 const mainParagraphLines = [
   ["25", "years", "driving", "Telecom", "Innovation."],
   ["Software", "deployed", "in", "over", "40", "countries."],
@@ -9,16 +9,7 @@ const mainParagraphLines = [
 ];
 
 const futureParagraphLines = [
-  [
-    "Now",
-    "Engineering",
-    "the",
-    "future",
-    "of",
-    "Telecom",
-    "Artificial",
-    "Intelligence.",
-  ],
+  ["Now", "Engineering", "the", "future", "of", "Telecom", "AI."],
 ];
 
 const allWords = [...mainParagraphLines.flat(), ...futureParagraphLines.flat()];
@@ -48,6 +39,7 @@ const AboutStats = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 3-Phase Color Calculation per word
   const getWordColor = (globalIndex) => {
     const threshLightGrey = (globalIndex / totalWordCount) * 0.7 + 0.08;
     const threshWhite = (globalIndex / totalWordCount) * 0.7 + 0.18;
@@ -63,22 +55,61 @@ const AboutStats = () => {
 
   let globalWordIndex = 0;
 
+  // Helper to render lines with orphan protection
+  const renderLineWords = (lineWords) => {
+    const elements = [];
+    const len = lineWords.length;
+
+    for (let i = 0; i < len; i++) {
+      // If we are at the second-to-last word, bind it with the final word in a no-orphan pair
+      if (i === len - 2) {
+        const word1 = lineWords[i];
+        const color1 = getWordColor(globalWordIndex);
+        globalWordIndex++;
+
+        const word2 = lineWords[i + 1];
+        const color2 = getWordColor(globalWordIndex);
+        globalWordIndex++;
+
+        elements.push(
+          <span key={`pair-${i}`} className="no-orphan-pair">
+            <span className="reveal-word" style={{ color: color1 }}>
+              {word1}
+            </span>{" "}
+            <span className="reveal-word" style={{ color: color2 }}>
+              {word2}
+            </span>
+          </span>,
+        );
+        break; // Reached the end of the line
+      } else {
+        const word = lineWords[i];
+        const color = getWordColor(globalWordIndex);
+        globalWordIndex++;
+
+        elements.push(
+          <span key={i} className="reveal-word" style={{ color: color }}>
+            {word}{" "}
+          </span>,
+        );
+      }
+    }
+
+    return elements;
+  };
+
   return (
     <>
       <style>{`
         /* About Section */
         .about-section {
           padding-top: 48px;
-          padding-bottom: 72px;
+          padding-bottom: 48px;
           position: relative;
           box-sizing: border-box;
           overflow: hidden;
         }
 
-        /* 
-          Layout Container:
-          justify-content: space-between anchors logo on left, text on right
-        */
         .about-layout {
           display: flex;
           width: 100%;
@@ -88,7 +119,6 @@ const AboutStats = () => {
           box-sizing: border-box;
         }
 
-        /* WIT Logo: scales smoothly without pushing content out */
         .about-logo-wrapper {
           width: clamp(200px, 18vw, 257.245px);
           height: auto;
@@ -102,14 +132,10 @@ const AboutStats = () => {
           display: block;
         }
 
-        /* 
-          Text Container:
-          min-width: 0 prevents flex child from expanding outside margin
-        */
         .about-text-container {
           display: flex;
           flex: 1 1 0;
-          min-width: 0; /* CRITICAL: stops flex overflow */
+          min-width: 0;
           max-width: 882px;
           flex-direction: column;
           align-items: flex-start;
@@ -117,8 +143,8 @@ const AboutStats = () => {
           box-sizing: border-box;
         }
 
-        /* Eyebrow: WIT: CELEBRATING 25 YEARS IN 2026! */
         .about-eyebrow {
+          align-self: stretch;
           color: #F4F7FF;
           font-family: 'Geist Mono', monospace;
           font-size: 16px;
@@ -127,13 +153,15 @@ const AboutStats = () => {
           line-height: 24px;
           letter-spacing: -0.32px;
           margin: 0;
+          text-wrap: balance;
         }
 
         /* 
           Editorial Text Block:
-          clamp(36px, 3.3vw, 48px) ensures lines fit comfortably inside the margins
+          text-wrap: balance & pretty prevents uneven line breaks
         */
         .about-text-block {
+          align-self: stretch;
           width: 100%;
           font-size: clamp(36px, 3.3vw, 48px);
           font-style: normal;
@@ -144,33 +172,38 @@ const AboutStats = () => {
           display: flex;
           flex-direction: column;
           box-sizing: border-box;
+          text-wrap: balance;
+          text-wrap: pretty;
         }
 
-        /* 
-          Each line is a block element that naturally sits on its own line,
-          without forcing white-space: nowrap (which caused the overflow)
-        */
         .about-line {
           display: block;
           margin: 0;
           line-height: 1.15;
-          word-break: normal;
-          overflow-wrap: break-word;
+          text-wrap: balance;
+          text-wrap: pretty;
         }
 
-        /* Word Span with smooth color transition */
+        /* 
+          No-Orphan Pair:
+          Guarantees the last two words can NEVER be split onto separate lines
+        */
+        .no-orphan-pair {
+          display: inline;
+          white-space: nowrap;
+        }
+
         .reveal-word {
           display: inline;
           transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Future paragraph separation */
         .about-future-group {
           margin-top: clamp(28px, 3vw, 48px);
         }
 
-        /* Responsive Breakpoints */
-        @media (max-width: 900px) {
+        /* ================= MOBILE RESPONSIVE (<= 768px) ================= */
+        @media (max-width: 768px) {
           .about-section {
             padding-top: 40px;
             padding-bottom: 40px;
@@ -178,22 +211,42 @@ const AboutStats = () => {
 
           .about-layout {
             flex-direction: column;
+            align-items: flex-start;
             gap: 36px;
           }
 
+          /* Exact Mobile Logo: 142.755px by 62.151px */
           .about-logo-wrapper {
             margin-top: 0;
-            width: 180px;
+            width: 142.755px;
+            height: 62.151px;
+            flex-shrink: 0;
           }
 
+          .about-text-container {
+            width: 100%;
+            gap: 16px;
+          }
+
+          .about-eyebrow {
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: -0.32px;
+          }
+
+          /* Exact Mobile Text: 32px, line-height 36px, letter-spacing -0.64px */
           .about-text-block {
-            font-size: 28px;
-            line-height: 34px;
-            letter-spacing: -0.5px;
+            font-size: 32px;
+            line-height: 36px;
+            letter-spacing: -0.64px;
+          }
+
+          .about-line {
+            line-height: 36px;
           }
 
           .about-future-group {
-            margin-top: 24px;
+            margin-top: 36px;
           }
         }
       `}</style>
@@ -201,7 +254,7 @@ const AboutStats = () => {
       <section ref={sectionRef} className="about-section">
         <div className="section-container">
           <div className="about-layout">
-            {/* Left: WIT SVG Logo */}
+            {/* Logo */}
             <div className="about-logo-wrapper">
               <svg
                 className="about-logo-svg"
@@ -216,51 +269,27 @@ const AboutStats = () => {
               </svg>
             </div>
 
-            {/* Right: Text Container with min-width: 0 constraint */}
+            {/* Text Container with Orphan Protection */}
             <div className="about-text-container">
               <p className="about-eyebrow">
                 WIT: CELEBRATING 25 YEARS IN 2026!
               </p>
 
               <div className="about-text-block">
-                {/* Lines with safe text wrap */}
+                {/* Paragraph 1 */}
                 <div className="about-lines-group">
                   {mainParagraphLines.map((lineWords, lineIdx) => (
                     <div key={lineIdx} className="about-line">
-                      {lineWords.map((word, wordIdx) => {
-                        const wordColor = getWordColor(globalWordIndex);
-                        globalWordIndex++;
-                        return (
-                          <span
-                            key={wordIdx}
-                            className="reveal-word"
-                            style={{ color: wordColor }}
-                          >
-                            {word}{" "}
-                          </span>
-                        );
-                      })}
+                      {renderLineWords(lineWords)}
                     </div>
                   ))}
                 </div>
 
-                {/* Future statement line */}
+                {/* Future paragraph */}
                 <div className="about-future-group">
                   {futureParagraphLines.map((lineWords, lineIdx) => (
                     <div key={lineIdx} className="about-line">
-                      {lineWords.map((word, wordIdx) => {
-                        const wordColor = getWordColor(globalWordIndex);
-                        globalWordIndex++;
-                        return (
-                          <span
-                            key={wordIdx}
-                            className="reveal-word"
-                            style={{ color: wordColor }}
-                          >
-                            {word}{" "}
-                          </span>
-                        );
-                      })}
+                      {renderLineWords(lineWords)}
                     </div>
                   ))}
                 </div>

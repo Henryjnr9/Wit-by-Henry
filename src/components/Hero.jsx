@@ -7,14 +7,13 @@ const Hero = () => {
   return (
     <>
       <style>{`
-        /* Exactly 163px spacing between bottom of header and hero text */
+        /* Desktop base */
         .hero-section {
           padding-top: calc(70px + 163px);
-          padding-bottom: 70px;
+          padding-bottom: 0;
           position: relative;
         }
 
-        /* Container for hero text, subtext, and buttons (1280px with 32px gap) */
         .hero-header-container {
           display: flex;
           width: 100%;
@@ -24,7 +23,6 @@ const Hero = () => {
           gap: 32px;
         }
 
-        /* Top row: Title + Subtext */
         .hero-text-row {
           display: flex;
           justify-content: space-between;
@@ -33,7 +31,6 @@ const Hero = () => {
           width: 100%;
         }
 
-        /* Agent AI text */
         .hero-headline {
           width: 457px;
           color: #F4F7FF;
@@ -41,12 +38,11 @@ const Hero = () => {
           font-size: 80px;
           font-style: normal;
           font-weight: 500;
-          line-height: 72px; /* 90% */
+          line-height: 72px;
           letter-spacing: -1.6px;
           margin: 0;
         }
 
-        /* Subtext */
         .hero-subtext {
           width: 571px;
           color: #ABABAB;
@@ -54,22 +50,20 @@ const Hero = () => {
           font-size: 18px;
           font-style: normal;
           font-weight: 400;
-          line-height: 25px; /* 138.889% */
+          line-height: 25px;
           letter-spacing: -0.17px;
           margin: 0;
         }
 
-        /* Container for both buttons */
         .hero-buttons-container {
           display: flex;
           align-items: flex-start;
           gap: 16px;
         }
 
-        /* White Button */
         .btn-white {
           display: flex;
-          padding: 6px 16px;
+          padding: 8px 18px;
           justify-content: center;
           align-items: center;
           gap: 10px;
@@ -88,13 +82,11 @@ const Hero = () => {
         .btn-white:hover {
           background: #E5E5E5;
           transform: translateY(-1px);
-          box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
         }
 
-        /* Grey Button */
         .btn-grey {
           display: flex;
-          padding: 6px 16px;
+          padding: 8px 18px;
           justify-content: center;
           align-items: center;
           gap: 10px;
@@ -116,11 +108,9 @@ const Hero = () => {
           transform: translateY(-1px);
         }
 
-        /* Center Image Card (77px space from buttons) */
         .hero-center-card {
           display: flex;
           width: 100%;
-          
           height: 562px;
           margin: 77px auto 0;
           padding: 102px 230px 103px 230px;
@@ -134,7 +124,6 @@ const Hero = () => {
           overflow: hidden;
         }
 
-        /* Large Wit SVG */
         .hero-wit-svg {
           width: 820.011px;
           height: 357.005px;
@@ -143,7 +132,6 @@ const Hero = () => {
           display: block;
         }
 
-        /* Moving line animation around the SVG stroke */
         .wit-stroke-animated {
           stroke-dasharray: 260 800;
           stroke-dashoffset: 0;
@@ -151,54 +139,64 @@ const Hero = () => {
         }
 
         @keyframes strokeLoop {
-          from {
-            stroke-dashoffset: 0;
-          }
-          to {
-            stroke-dashoffset: -2120;
-          }
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -2120; }
         }
 
-        /* Responsive Breakpoints */
-        @media (max-width: 1100px) {
+        /* ================= MOBILE RESPONSIVE (<= 768px) ================= */
+        @media (max-width: 768px) {
+          .hero-section {
+            padding-top: 105px; /* Clean breathing room below mobile navbar */
+            padding-bottom: 24px;
+          }
+
+          .hero-header-container {
+            gap: 20px;
+          }
+
           .hero-text-row {
             flex-direction: column;
             align-items: flex-start;
-            gap: 24px;
+            gap: 16px;
           }
 
+          /* Exact mobile headline: 42px, line-height 44px */
           .hero-headline {
             width: 100%;
-            font-size: clamp(48px, 6vw, 72px);
-            line-height: 1;
-          }
-
-          .hero-subtext {
-            width: 100%;
-          }
-
-          .hero-center-card {
-            padding: 40px 24px;
-            height: auto;
-            min-height: 380px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-section {
-            padding-top: calc(70px + 60px);
-          }
-
-          .hero-headline {
             font-size: 42px;
             line-height: 44px;
             letter-spacing: -1px;
           }
 
+          /* Exact mobile body text: 16px, line-height 24px */
+          .hero-subtext {
+            width: 100%;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: -0.17px;
+          }
+
+          /* Side-by-side buttons on mobile */
+          .hero-buttons-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+          }
+
+          /* Mobile card: portrait aspect ratio matching your screenshot */
           .hero-center-card {
-            margin-top: 48px;
-            min-height: 260px;
-            padding: 30px 16px;
+            margin-top: 32px;
+            height: auto;
+            aspect-ratio: 1 / 1.05;
+            min-height: 320px;
+            padding: 28px 20px;
+            border-radius: 18px;
+          }
+
+          .hero-wit-svg {
+            width: 90%;
+            height: auto;
           }
         }
       `}</style>
@@ -219,7 +217,7 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Buttons */}
+            {/* Buttons (Side-by-side as in your screenshot) */}
             <div className="hero-buttons-container">
               <a href="#try" className="btn-white">
                 Try AINNOV8
